@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Лента учебных программ
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h1>Учебные программы</h1>
+
+  <!-- Блок для предметов -->
+  <h2 class="mt-4">Выберите предмет</h2>
+  <div class="row mt-3">
+    {% for subject in subjects %}
+    <div class="col-md-4 mb-3">
+      <div class="card">
+        <div class="card-body text-center">
+          <h5 class="card-title">{{ subject.title }}</h5>
+          <a href="{% url 'courses:subject_detail' subject.slug %}" class="btn btn-primary">Перейти к предмету</a>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <p>Предметов пока нет.</p>
+    {% endfor %}
+  </div>
+
+  <hr class="mt-5">
+
+  <!-- Перечень курсов -->
+  <h2 class="mt-4">Доступные курсы</h2>
+  {% for course in page_obj %}
+  <article class="mb-5">
+    <div class="card">
+      <div class="card-body">
+        <h2 class="card-title">
+          <a href="{% url 'courses:course_detail' course.slug %}" class="text-decoration-none">
+            {{ course.title }}
+          </a>
+        </h2>
+        <p class="card-text">{{ course.overview|truncatewords:30 }}</p>
+        <p class="text-muted">
+          <small>
+            Автор: {{ course.owner.username }} | Дата создания: {{ course.created|date:"d E Y" }}
+          </small>
+        </p>
+        <a href="{% url 'courses:course_detail' course.slug %}" class="btn btn-success mt-2">Подробнее о курсе</a>
+      </div>
+    </div>
+  </article>
+  {% empty %}
+  <p>Курсов пока нет.</p>
+  {% endfor %}
+
+  <!-- Пагинация -->
+  {% include "includes/paginator.html" %}
+</div>
+{% endblock %}

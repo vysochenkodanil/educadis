@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}
+Перечень мероприятий
+{% endblock %}
+
+{% block content %}
+<h2>Доступные спортивные мероприятия</h2>
+
+<div class="activities-list">
+    {% for activity in activities %}
+        <div class="card mb-4">
+            <div class="card-body">
+                <h3 class="card-title">{{ activity.title }}</h3>
+                <p class="card-text">{{ activity.description|truncatewords:30 }}</p>
+                <p><strong>Дата:</strong> {{ activity.date }}</p>
+                <a href="{% url 'pages:activity_detail' activity.slug %}" class="btn btn-primary">Подробнее</a>
+                <a href="{% url 'pages:activity_signup' activity.slug %}" class="btn btn-success">Записаться на участие</a>
+            </div>
+        </div>
+    {% empty %}
+        <p>Мероприятий пока нет.</p>
+    {% endfor %}
+</div>
+
+{% include "includes/paginator.html" %}
+{% endblock %}

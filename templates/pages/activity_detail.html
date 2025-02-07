@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ activity.title }}
+{% endblock %}
+
+{% block content %}
+<h2>{{ activity.title }}</h2>
+<p>{{ activity.description }}</p>
+<p><strong>Дата:</strong> {{ activity.date }}</p>
+<p><strong>Необходимая документация:</strong></p>
+<ul>
+    <li>Копия паспорта</li>
+    <li>Медицинская справка</li>
+    <li>Анкета участника</li>
+</ul>
+
+{% if user.is_authenticated %}
+    <form method="post" action="{% url 'pages:activity_signup' activity.slug %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success">Записаться на участие</button>
+    </form>
+{% else %}
+    <p><a href="{% url 'login' %}">Войдите</a>, чтобы записаться на участие.</p>
+{% endif %}
+
+<div class="mt-4">
+    <h4>Участники:</h4>
+    <ul>
+        {% for reg in activity.activityregistration_set.all %}
+            <li>
+                {{ reg.user.get_full_name }}
+                {% if reg.additional_participants %}
+                    + {{ reg.additional_participants }}
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<hr>
+<h3>Комментарии</h3>
+
+<div class="comments">
+    {% for comment in activity.comments.all %}
+        <div class="comment">
+            <p><strong>{{ comment.author }}</strong> написал(а):</p>
+            <p>{{ comment.text }}</p>
+            {% if user == comment.author %}
+                <a href="{% url 'pages:edit_comment' comment.id %}" class="btn btn-sm btn-warning">Редактировать</a>
+                <form method="post" action="{% url 'pages:delete_comment' comment.id %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-danger">Удалить</button>
+                </form>
+            {% endif %}
+        </div>
+    {% empty %}
+        <p>Комментариев пока нет. Будьте первым!</p>
+    {% endfor %}
+</div>
+
+{% if user.is_authenticated %}
+    <hr>
+    <h4>Оставить комментарий</h4>
+    <form method="post" action="{% url 'pages:add_comment' activity.id %}">
+        {% csrf_token %}
+        <textarea name="text" class="form-control" rows="3" placeholder="Ваш комментарий..."></textarea>
+        <button type="submit" class="btn btn-primary mt-2">Отправить</button>
+    </form>
+{% else %}
+    <p><a href="{% url 'login' %}">Войдите</a>, чтобы оставить комментарий.</p>
+{% endif %}
+{% endblock %}

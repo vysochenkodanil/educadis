@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}
+Создание активности
+{% endblock %}
+
+{% block content %}
+<h1>Создать активность</h1>
+
+{% if user.is_staff %}
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit" class="btn btn-primary">Создать</button>
+    <a href="{% url 'pages:activity_list' %}" class="btn btn-secondary">Отмена</a>
+  </form>
+{% else %}
+  <p>У вас нет прав для создания активностей. Обратитесь к администратору сайта.</p>
+  <a href="{% url 'pages:activity_list' %}" class="btn btn-secondary">Назад к списку активностей</a>
+{% endif %}
+{% endblock %}

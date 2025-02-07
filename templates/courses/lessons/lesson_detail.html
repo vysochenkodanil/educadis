@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h2>{{ lesson.title }}</h2>
+        </div>
+        <div class="card-body">
+            <!-- Теоретическая часть -->
+            {% if lesson.content %}
+            <div class="mb-4">
+                <h4>Теоретическая часть</h4>
+                <p>{{ lesson.content|safe }}</p>
+            </div>
+            {% else %}
+            <p class="text-muted">Теоретическая часть отсутствует.</p>
+            {% endif %}
+
+            <!-- Кнопка для тестового задания -->
+            {% if lesson.test %}
+            <div class="mb-4">
+                <a href="{% url 'courses:lesson_test' lesson.id %}" class="btn btn-success">
+                    Пройти тест
+                </a>
+            </div>
+            {% else %}
+            <p class="text-muted">Тестовое задание отсутствует.</p>
+            {% endif %}
+
+            <!-- Кнопка возврата к списку уроков -->
+            <a href="{% url 'courses:module_detail' lesson.module.id %}" class="btn btn-primary">
+                Вернуться к урокам
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

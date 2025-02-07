@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}
+Редактировать комментарий
+{% endblock %}
+
+{% block content %}
+<h2>Редактировать комментарий</h2>
+<form method="post">
+    {% csrf_token %}
+    <textarea name="text" class="form-control" rows="3">{{ comment.text }}</textarea>
+    <button type="submit" class="btn btn-primary mt-2">Сохранить</button>
+</form>
+<a href="{% url 'pages:activity_detail' comment.activity.slug %}" class="btn btn-secondary mt-2">Отменить</a>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% block title %}
+  Редактирование профиля
+{% endblock %}
+
+{% block content %}
+    <div class="card col-6">
+    <div class="card">
+    <div class="card-header">
+      Заполните поля новой информацией.
+    </div>
+    <div class="card-body">
+
+  <h1 class="mb-5 text-center">Редактирование профиля</h1>
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+    <a href="{% url 'user:user_profile' user.username %}" class="btn btn-secondary">Отмена</a>
+  </form>
+{% endblock %}

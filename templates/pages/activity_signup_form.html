@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Запись на мероприятие: {{ activity.title }}</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="mb-3">
+            <label class="form-label">Ваше имя:</label>
+            <input type="text" class="form-control" 
+                   value="{{ user.get_full_name }}" disabled>
+        </div>
+        
+        {{ form.as_p }}
+        
+        <button type="submit" class="btn btn-primary">
+            Подтвердить запись
+        </button>
+        <a href="{% url 'pages:activity_detail' activity.slug %}" 
+           class="btn btn-secondary">
+            Отмена
+        </a>
+    </form>
+</div>
+{% endblock %}
